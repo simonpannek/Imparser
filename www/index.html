@@ -4,10 +4,39 @@
     <meta charset="UTF-8">
     <title>Imposter Parser</title>
 
+    <!-- Normalize -->
+    <link crossorigin="anonymous" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"
+          integrity="sha512-NhSC1YmyruXifcj/KFRWoC561YpHpc5Jtzgvbuzx5VozKpWvQ+4nXhPdFgmx8xqexRcpAglTj9sIBWINXa8x5w=="
+          rel="stylesheet"/>
+    <!-- Bootstrap -->
+    <link crossorigin="anonymous"
+          href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css"
+          integrity="sha512-MoRNloxbStBcD8z3M/2BmnT+rg4IsMxPkXaGh2zD6LGNNFE80W3onsAhRcMAMrSoyWL9xD7Ert0men7vR8LUZg=="
+          rel="stylesheet"/>
     <!-- Main -->
     <link href="assets/css/main.css" rel="stylesheet">
 </head>
 <body>
+
+<div class="text-center mt-3 mx-5">
+    <h1>Imposter Parser</h1>
+    <hr/>
+
+    <h2>HOW TO</h2>
+    <p>Open wireshark and filter for the Start Game Package on udp port 22023.</p>
+    <p>Rightclick on the data and select "Copy Bytes ...as a Hex Stream"</p>
+    <p>Paste the copied hex dump into the text field below and press "parse package".</p>
+    <br/>
+
+    <form>
+        <div class="form-group">
+            <label for="dump">Hex Dump</label>
+            <textarea class="form-control" id="dump" rows="10"></textarea>
+        </div>
+
+        <button class="btn btn-primary" id="parse" onclick="parsePackage()" type="button">Parse package</button>
+    </form>
+</div>
 
 <!-- Main -->
 <script src="assets/js/main.js"></script>
