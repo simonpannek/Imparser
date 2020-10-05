@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Imposter Parser</title>
+    <title>Imparser</title>
 
     <!-- Normalize -->
     <link crossorigin="anonymous" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"
@@ -19,13 +19,22 @@
 <body>
 
 <div class="text-center mt-3 mx-5">
-    <h1>Imposter Parser</h1>
+    <h1>Imparser</h1>
     <hr/>
 
-    <h2>HOW TO</h2>
-    <p>Open wireshark and filter for the Start Game Package on udp port 22023.</p>
-    <p>Rightclick on the data and select "Copy Bytes ...as a Hex Stream"</p>
-    <p>Paste the copied hex dump into the text field below and press "parse package".</p>
+    <h3 class="pointer" data-target="#how-to" data-toggle="collapse">HOW TO</h3>
+    <div class="collapse" id="how-to">
+        <p>Open Wireshark, start listening on your Internet Connection and filter for:</p>
+        <div class="my-3">
+            <code>udp.port == 22023 && data.data[0] == 01 && data contains 40:1c:46:00 && frame contains
+                "username"</code>
+        </div>
+        <p><i>(Make sure to replace username with your username first)</i></p>
+
+        <p>Select the package and right-click on the hex dump which appears at the bottom of the window
+            and copy the Bytes "...as a Hex Stream".</p>
+        <p>Paste the copied hex dump into the text field below and press "Parse package".</p>
+    </div>
     <br/>
 
     <form>
@@ -34,10 +43,21 @@
             <textarea class="form-control" id="dump" rows="10"></textarea>
         </div>
 
-        <button class="btn btn-primary" id="parse" onclick="parsePackage()" type="button">Parse package</button>
+        <button class="btn btn-danger mb-4" id="parse" onclick="parsePackage()" type="button">Parse package</button>
     </form>
+
+    <table class="table" id="result"></table>
 </div>
 
+
+<!-- JQuery -->
+<script crossorigin="anonymous"
+        integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg=="
+        src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!-- Bootstrap -->
+<script crossorigin="anonymous"
+        integrity="sha512-M5KW3ztuIICmVIhjSqXe01oV2bpe248gOxqmlcYrEzAvws7Pw3z6BK0iGbrwvdrUQUhi3eXgtxp5I8PDo9YfjQ=="
+        src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <!-- Main -->
 <script src="assets/js/main.js"></script>
 

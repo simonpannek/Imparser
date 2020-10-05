@@ -5,3 +5,7 @@
 #parse {
     float: right;
 }
+
+.pointer {
+    cursor: pointer;
+}

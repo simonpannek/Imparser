@@ -1,4 +1,8 @@
+let map;
+
 function parsePackage() {
+    map = new Map();
+
     const dump = splitIntoBytes(document.getElementById("dump").value);
 
     for (let i = 160; i < dump.length; i++) {
@@ -22,10 +26,12 @@ function parsePackage() {
             // Check for Imposter
             i += 4;
             const imposter = dump[i] !== "00";
-
-            console.log(name + ": " + (imposter ? "Imposter" : "Crewmate"));
+            map.set(name, imposter);
+            console.log(name + ": " + imposter)
         }
     }
+
+    printTable();
 }
 
 function splitIntoBytes(str) {
@@ -39,4 +45,30 @@ function splitIntoBytes(str) {
     } while ((str = str.substring(size)) !== "");
 
     return bytes;
+}
+
+function printTable() {
+    const table = [];
+
+    if (map.size) {
+        table.push(
+            "<thead><tr><th scope='col'>#</th><th scope='col'>Username</th><th scope='col'>Role</th></tr></thead>",
+            "<tbody>"
+        );
+
+        let i = 1;
+        for (let entry of map) {
+            table.push(
+                "<tr>",
+                "<th scope='row'>" + i++ + "</th>",
+                "<td>" + entry[0] + "</td>",
+                "<td>" + (entry[1] ? "Imposter" : "Crewmate") + "</td>",
+                "</tr>"
+            );
+        }
+
+        table.push("</tbody>");
+    }
+
+    document.getElementById("result").innerHTML = table.join("");
 }
