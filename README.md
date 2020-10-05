@@ -1,7 +1,8 @@
 # Imparser (Imposter-Parser)
 
 See who the Imposters in an Among Us round are without a modded client (just using Wireshark).
-I do not recommend using this in public rounds, as this ruins the game for others. This is just a showcase for what is possible if a game is implemented client-side.
+
+**I do not recommend using this in public rounds**, as this ruins the game for others. This is just a showcase for what is possible if a game is implemented client-side.
 
 ## How to use?
 Open Wireshark, start listening on your Internet Connection and filter for 
