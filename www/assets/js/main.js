@@ -27,7 +27,6 @@ function parsePackage() {
             i += 4;
             const imposter = dump[i] !== "00";
             map.set(name, imposter);
-            console.log(name + ": " + imposter)
         }
     }
 
