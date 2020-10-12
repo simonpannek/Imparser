@@ -26,8 +26,6 @@ function parsePackage() {
             let size = getByte(pointer, dump) + getByte(pointer + 1, dump) * 256;
             pointer += 2;
             const type = getByte(pointer++, dump);
-            console.log("Size: " + size);
-            console.log("Type: " + type);
 
             // Check if type is interesting to us
             if (type === 2) {
@@ -38,8 +36,6 @@ function parsePackage() {
                     size--;
                 }
                 const action = getByte(pointer++, dump);
-                console.log("Target: " + target);
-                console.log("Action: " + action);
 
                 // Update size
                 size -= 2;
@@ -59,8 +55,6 @@ function parsePackage() {
                         for (let i = 0; i < name_length; i++)
                             name += String.fromCharCode(getByte(pointer + i, dump));
                         pointer += name_length;
-                        console.log("Length: " + name_length)
-                        console.log("Name: " + name);
 
                         // Get color, hat, pet and skin
                         const color = getByte(pointer++, dump);

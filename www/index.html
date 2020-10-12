@@ -26,8 +26,7 @@
     <div class="collapse" id="how-to">
         <p>Open Wireshark, start listening on your Internet Connection and filter for:</p>
         <div class="my-3">
-            <code>udp.port == 22023 && data.data[0] == 01 && data contains 40:1c:46:00 && frame contains
-                "username"</code>
+            <code>udp && data.data[0] == 01 && data contains 40:1c:46:00 && frame.len > 100</code>
         </div>
         <p><i>(Make sure to replace username with your username first)</i></p>
 
