@@ -137,7 +137,7 @@ function printTable() {
                 "<td>" + printImage("color", data.color) + "</td>",
                 "<td>" + printImage("hat", data.hat, true) + "</td>",
                 "<td>" + printImage("pet", data.pet, true) + "</td>",
-                "<td>" + printImage("skin", data.skin) + "</td>",
+                "<td>" + printImage("skin", data.skin, true) + "</td>",
                 "<td>" + (data.status === 0 ? "Crewmate" : "Imposter") + "</td>",
                 "</tr>"
             );
