@@ -18,4 +18,5 @@ Now you should be able to see who the imposters are in the table below.
 In case you want to try out the parser without running WireShark + Among Us, you can just copy the hexdump from the example_hexdump.txt file into the parser and try it out that way.
 
 It should look similar to this:
+
 ![](example_hexdump.png)
