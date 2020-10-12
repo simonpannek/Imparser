@@ -13,3 +13,9 @@ After a round starts a new package should appear. Select the package and right-c
 Press "Copy Bytes ...as a Hex Stream" and paste the result in the text field of the [parser](https://imparser.netlify.app/).
 
 Now you should be able to see who the imposters are in the table below.
+
+## Example Hexdump
+In case you want to try out the parser without running WireShark + Among Us, you can just copy the hexdump from the example_hexdump.txt file into the parser and try it out that way.
+
+It should look similar to this:
+![](example_hexdump.png)
