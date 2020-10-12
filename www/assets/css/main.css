@@ -9,3 +9,15 @@
 .pointer {
     cursor: pointer;
 }
+
+img {
+    height: 4rem;
+}
+
+img.smaller {
+    height: 3.5rem;
+}
+
+th, td {
+    vertical-align: middle !important;
+}

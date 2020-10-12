@@ -5,32 +5,92 @@ function parsePackage() {
 
     const dump = splitIntoBytes(document.getElementById("dump").value);
 
-    for (let i = 160; i < dump.length; i++) {
-        let current = parseInt("0x" + dump[i]);
+    let pointer = 0;
 
-        let name = "";
+    try {
+        // Check for package length
+        if (dump.length <= 42) throw new Error("Couldn't skip UDP Header, package is too short.");
+        pointer += 42;
 
-        // Parse names
-        while (current === 32 ||
-            (current >= 48 && current <= 71) ||
-            (current >= 65 && current <= 90) ||
-            (current >= 97 && current <= 122)) {
-            name += String.fromCharCode(current);
+        // Check for reliable package
+        if (getByte(pointer, dump) !== 1) throw new Error("The package you have entered has the wrong type.");
+        pointer += 4;
 
-            i++;
-            current = parseInt("0x" + dump[i]);
+        // Check for GameData
+        if (getByte(pointer, dump) !== 1) throw new Error("The package you have entered contains the wrong content.");
+        pointer += 6;
+
+        // Loop through GameData
+        while (pointer < dump.length) {
+            // Get size and type
+            let size = getByte(pointer, dump) + getByte(pointer + 1, dump) * 256;
+            pointer += 2;
+            const type = getByte(pointer++, dump);
+
+            // Check if type is interesting to us
+            if (type === 2) {
+                // Get target and action
+                const target = getByte(pointer, dump) + getByte(pointer + 1, dump) * 256;
+                pointer += 2;
+                const action = getByte(pointer++, dump);
+
+                // Update size
+                size -= 3;
+
+                // Check if action is interesting to us
+                if (action === 30) {
+                    // Loop through players
+                    while (pointer < dump.length) {
+                        // Get size and id
+                        const player_size = getByte(pointer, dump) + getByte(pointer + 1, dump) * 256;
+                        pointer += 2;
+                        const player_id = getByte(pointer++, dump);
+
+                        // Get name
+                        const name_length = getByte(pointer++, dump);
+                        let name = "";
+                        for (let i = 0; i < name_length; i++)
+                            name += String.fromCharCode(getByte(pointer + i, dump));
+                        pointer += name_length;
+
+                        // Get color, hat, pet and skin
+                        const color = getByte(pointer++, dump);
+                        const hat = getByte(pointer++, dump);
+                        const pet = getByte(pointer++, dump);
+                        const skin = getByte(pointer++, dump);
+
+                        // Get status
+                        const status = getByte(pointer++, dump);
+
+                        // Skip tasks
+                        const task_count = getByte(pointer++, dump);
+                        pointer += task_count * 2;
+
+                        // Put info in the map
+                        map.set(name, {
+                            id: player_id,
+                            color: color,
+                            hat: hat,
+                            pet: pet,
+                            skin: skin,
+                            status: status
+                        });
+
+                        // Update size
+                        size -= player_size;
+                    }
+                }
+            }
+
+            // Skip to end of part
+            pointer += size;
         }
-        name = name.trim();
 
-        if (name.length > 0) {
-            // Check for Imposter
-            i += 4;
-            const imposter = dump[i] !== "00";
-            map.set(name, imposter);
-        }
+        printTable();
+
+    } catch (e) {
+        printError(e);
     }
-
-    printTable();
 }
 
 function splitIntoBytes(str) {
@@ -46,22 +106,36 @@ function splitIntoBytes(str) {
     return bytes;
 }
 
+function getByte(pointer, array) {
+    return parseInt("0x" + array[pointer]);
+}
+
+function printError(e) {
+    document.getElementById("result").innerHTML = "<span style='color: red'>" + e + "</span>";
+}
+
 function printTable() {
     const table = [];
 
     if (map.size) {
         table.push(
-            "<thead><tr><th scope='col'>#</th><th scope='col'>Username</th><th scope='col'>Role</th></tr></thead>",
-            "<tbody>"
+            "<thead><tr><th scope='col'>#</th><th scope='col'>Username</th><th scope='col'>Color</th>" +
+            "<th scope='col'>Hat</th><th scope='col'>Pet</th><th scope='col'>Skin</th>" +
+            "<th scope='col'>Role</th></tr></thead><tbody>"
         );
 
-        let i = 1;
         for (let entry of map) {
+            const name = entry[0];
+            const data = entry[1];
             table.push(
                 "<tr>",
-                "<th scope='row'>" + i++ + "</th>",
-                "<td>" + entry[0] + "</td>",
-                "<td>" + (entry[1] ? "Imposter" : "Crewmate") + "</td>",
+                "<th scope='row'>" + data.id + "</th>",
+                "<td>" + name + "</td>",
+                "<td>" + printImage("color", data.color) + "</td>",
+                "<td>" + printImage("hat", data.hat, true) + "</td>",
+                "<td>" + printImage("pet", data.pet, true) + "</td>",
+                "<td>" + printImage("skin", data.skin) + "</td>",
+                "<td>" + (data.status === 0 ? "Crewmate" : "Imposter") + "</td>",
                 "</tr>"
             );
         }
@@ -70,4 +144,8 @@ function printTable() {
     }
 
     document.getElementById("result").innerHTML = table.join("");
+}
+
+function printImage(type, id, small) {
+    return "<img " + (small ? "class='smaller' " : "") + "src='assets/img/" + type + "/" + id + ".png' alt='Could not find id " + id + "'>";
 }
