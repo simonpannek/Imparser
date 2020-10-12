@@ -6,7 +6,7 @@ See who the Imposters in an Among Us round are without a modded client (just usi
 
 ## How to use?
 Open Wireshark, start listening on your Internet Connection and filter for 
-`udp && data.data[0] == 01 && data contains 40:1c:46:00 && frame.len > 100` (replace username with your username).
+`udp && data.data[0] == 01 && data contains 40:1c:46:00 && frame.len > 100`.
 
 After a round starts a new package should appear. Select the package and right-click on the hex dump which appears at the bottom of the window.
 
