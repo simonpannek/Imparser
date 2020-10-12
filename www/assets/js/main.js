@@ -14,11 +14,11 @@ function parsePackage() {
 
         // Check for reliable package
         if (getByte(pointer, dump) !== 1) throw new Error("The package you have entered has the wrong type.");
-        pointer += 4;
+        pointer += 5;
 
         // Check for GameData
-        if (getByte(pointer, dump) !== 1) throw new Error("The package you have entered contains the wrong content.");
-        pointer += 6;
+        if (getByte(pointer, dump) !== 5) throw new Error("The package you have entered contains the wrong content.");
+        pointer += 5;
 
         // Loop through GameData
         while (pointer < dump.length) {
@@ -26,16 +26,23 @@ function parsePackage() {
             let size = getByte(pointer, dump) + getByte(pointer + 1, dump) * 256;
             pointer += 2;
             const type = getByte(pointer++, dump);
+            console.log("Size: " + size);
+            console.log("Type: " + type);
 
             // Check if type is interesting to us
             if (type === 2) {
                 // Get target and action
-                const target = getByte(pointer, dump) + getByte(pointer + 1, dump) * 256;
-                pointer += 2;
+                const target = getByte(pointer++, dump);
+                if (target > 127) {
+                    pointer++;
+                    size--;
+                }
                 const action = getByte(pointer++, dump);
+                console.log("Target: " + target);
+                console.log("Action: " + action);
 
                 // Update size
-                size -= 3;
+                size -= 2;
 
                 // Check if action is interesting to us
                 if (action === 30) {
@@ -52,6 +59,8 @@ function parsePackage() {
                         for (let i = 0; i < name_length; i++)
                             name += String.fromCharCode(getByte(pointer + i, dump));
                         pointer += name_length;
+                        console.log("Length: " + name_length)
+                        console.log("Name: " + name);
 
                         // Get color, hat, pet and skin
                         const color = getByte(pointer++, dump);
